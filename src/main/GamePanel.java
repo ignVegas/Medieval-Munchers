@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
 	
 	final int defTileSize = 16;
@@ -19,7 +20,9 @@ public class GamePanel extends JPanel implements Runnable {
 	final int screenWidth = screenCol * tileSize;
 	final int screenHeight = screenRow * tileSize;
 	
-	final int FPS = 60;
+	int FPS = 60;
+	
+	boolean end = false;
 	
 	KeyHandler key = new KeyHandler();
 	Thread gThread;
@@ -77,23 +80,54 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	public void tick()
 	{
+		base();
+		movement();
 		
+	}
+	
+	public void base()
+	{
+		if(p.health <= 0)
+		{
+			end = true;
+		}
+	}
+	
+	public void movement()
+	{
 		if(key.up)
 		{
-			p.y -= p.speed; 
+			p.y -= p.speed;
+			if(p.y < 0)
+			{
+				p.y = 0;
+			}
 		}
 		else if(key.down)
 		{
 			p.y += p.speed;
+			if((p.y + tileSize) > screenHeight)
+			{
+				p.y = screenHeight - tileSize;
+			}
 		}
 		
 		if(key.left)
 		{
 			p.x -= p.speed;
+			if(p.x < 0)
+			{
+				p.x = 0;
+			}
 		}
 		else if(key.right)
 		{
 			p.x += p.speed;
+			p.health -= 1;
+			if((p.x + tileSize) > screenWidth)
+			{
+				p.x = screenWidth - tileSize;
+			}
 		}
 	}
 	
@@ -106,7 +140,19 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		g2.setColor(Color.white);
 		
+	//	g2.fillOval(p.x, p.y, tileSize, tileSize);
 		g2.fillRect(p.x, p.y, tileSize, tileSize);
+		
+		g2.drawRect(10, 10, 100, 30);
+		g2.setColor(Color.red);
+		g2.fillRect(11, 11, p.health - 1, 29);
+		
+		if(end)
+		{
+			g2.drawString("GAME OVER", (screenWidth / 2) - 30, screenHeight / 2);
+			p.speed = 0;
+		}
+		
 		g2.dispose();
 	}
 
