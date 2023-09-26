@@ -7,27 +7,29 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import Entity.Player;
+
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
 	
-	final int defTileSize = 16;
-	final int scale = 3;
+	public final int defTileSize = 16;
+	public final int scale = 3;
 	
-	final int tileSize = defTileSize * scale;
-	final int screenCol = 16;
-	final int screenRow = 12;
+	public final int tileSize = defTileSize * scale;
+	public final int screenCol = 16;
+	public final int screenRow = 12;
 	
-	final int screenWidth = screenCol * tileSize;
-	final int screenHeight = screenRow * tileSize;
+	public final int screenWidth = screenCol * tileSize;
+	public final int screenHeight = screenRow * tileSize;
 	
 	int FPS = 60;
 	
-	boolean end = false;
+	public boolean end = false;
 	
 	KeyHandler key = new KeyHandler();
 	Thread gThread;
 	
-	Player p = new Player();
+	Player p = new Player(this, key);
 	
 	public GamePanel()
 	{
@@ -81,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void tick()
 	{
 		base();
-		movement();
+		load();
 		
 	}
 	
@@ -93,42 +95,9 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
-	public void movement()
+	public void load()
 	{
-		if(key.up)
-		{
-			p.y -= p.speed;
-			if(p.y < 0)
-			{
-				p.y = 0;
-			}
-		}
-		else if(key.down)
-		{
-			p.y += p.speed;
-			if((p.y + tileSize) > screenHeight)
-			{
-				p.y = screenHeight - tileSize;
-			}
-		}
-		
-		if(key.left)
-		{
-			p.x -= p.speed;
-			if(p.x < 0)
-			{
-				p.x = 0;
-			}
-		}
-		else if(key.right)
-		{
-			p.x += p.speed;
-			p.health -= 1;
-			if((p.x + tileSize) > screenWidth)
-			{
-				p.x = screenWidth - tileSize;
-			}
-		}
+		p.update();
 	}
 	
 	public void paintComponent(Graphics g)
@@ -137,21 +106,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
-		
-		g2.setColor(Color.white);
-		
-	//	g2.fillOval(p.x, p.y, tileSize, tileSize);
-		g2.fillRect(p.x, p.y, tileSize, tileSize);
-		
-		g2.drawRect(10, 10, 100, 30);
-		g2.setColor(Color.red);
-		g2.fillRect(11, 11, p.health - 1, 29);
-		
-		if(end)
-		{
-			g2.drawString("GAME OVER", (screenWidth / 2) - 30, screenHeight / 2);
-			p.speed = 0;
-		}
+		p.draw(g2);
 		
 		g2.dispose();
 	}
