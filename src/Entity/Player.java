@@ -27,7 +27,7 @@ public class Player extends Entity{
 	{
 		if(key.up)
 		{
-			y -= speed;
+			y = speed;
 			if(y < 0)
 			{
 				y = 0;
@@ -53,7 +53,7 @@ public class Player extends Entity{
 		else if(key.right)
 		{
 			x += speed;
-			health -= 1;
+			//health -= 1; health testing
 			if((x + gp.tileSize) > gp.screenWidth)
 			{
 				x = gp.screenWidth - gp.tileSize;
@@ -65,7 +65,7 @@ public class Player extends Entity{
 			g2.setColor(Color.white);
 		
 		//	g2.fillOval(p.x, p.y, tileSize, tileSize);
-			g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+			g2.drawRect(x, y, gp.tileSize, gp.tileSize);
 			
 			g2.drawRect(10, 10, 100, 30);
 			g2.setColor(Color.red);
@@ -73,10 +73,6 @@ public class Player extends Entity{
 			
 			if(gp.end)
 			{
-				if(health < 0)
-				{
-					health = 0;
-				}
 				g2.drawString("GAME OVER", (gp.screenWidth / 2) - 30, gp.screenHeight / 2);
 				speed = 0;
 			}
