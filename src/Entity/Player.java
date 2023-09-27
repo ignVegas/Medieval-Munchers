@@ -53,7 +53,6 @@ public class Player extends Entity{
 		else if(key.right)
 		{
 			x += speed;
-			//health -= 1; health testing
 			if((x + gp.tileSize) > gp.screenWidth)
 			{
 				x = gp.screenWidth - gp.tileSize;
