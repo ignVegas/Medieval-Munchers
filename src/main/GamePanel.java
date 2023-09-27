@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import Entity.Player;
+import World.TileManager;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
@@ -30,6 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
 	Thread gThread;
 	
 	Player p = new Player(this, key);
+	TileManager tileM = new TileManager(this);
 	
 	public GamePanel()
 	{
@@ -49,6 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
 	@Override
 	public void run()
 	{
+		
+		p.baseSetting();
 		
 		double frameInt = 1000000000/FPS;
 		double delay = 0;
@@ -106,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
+		tileM.draw(g2);
 		p.draw(g2);
 		
 		g2.dispose();
